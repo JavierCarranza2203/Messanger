@@ -80,7 +80,7 @@ namespace Messanger
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    string fullMessage = $"{clientIP}: {message}";
+                    string fullMessage = $"{ServicioDeEncriptado.DecryptString(message)}";
 
                     Invoke(new Action(() => listMessages.Items.Add(fullMessage)));
 
