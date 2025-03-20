@@ -22,7 +22,8 @@ namespace Messanger
         {
             try
             {
-                client = new TcpClient(txtServerIP.Text, 5000);
+                client = new TcpClient();
+                client.Connect(txtServerIP.Text, 5000);
                 stream = client.GetStream();
                 listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
 
@@ -32,13 +33,10 @@ namespace Messanger
             }
             catch (SocketException ex)
             {
-                MessageBox.Show("Error de conexión: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
             }
         }
+
 
         private void ReceiveMessages()
         {

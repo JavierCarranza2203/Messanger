@@ -39,20 +39,27 @@ namespace Messanger
 
                 while (true)
                 {
-                    TcpClient client = server.AcceptTcpClient();
-                    IPEndPoint clientEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
-
-                    lock (clients)
+                    try
                     {
-                        clients.Add(client);
-                        clientIPs.Add(clientEndPoint.Address.ToString());
+                        TcpClient client = server.AcceptTcpClient();
+                        IPEndPoint clientEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+
+                        lock (clients)
+                        {
+                            clients.Add(client);
+                            clientIPs.Add(clientEndPoint.Address.ToString());
+                        }
+
+                        Invoke(new Action(() => listMessages.Items.Add($"Cliente conectado desde {clientEndPoint.Address}")));
+
+                        Thread clientThread = new Thread(() => HandleClient(client, clientEndPoint.Address.ToString()));
+                        clientThread.IsBackground = true;
+                        clientThread.Start();
                     }
-
-                    Invoke(new Action(() => listMessages.Items.Add($"Cliente conectado desde {clientEndPoint.Address}")));
-
-                    Thread clientThread = new Thread(() => HandleClient(client, clientEndPoint.Address.ToString()));
-                    clientThread.IsBackground = true;
-                    clientThread.Start();
+                    catch (SocketException se)
+                    {
+                        Invoke(new Action(() => listMessages.Items.Add("Error al aceptar cliente: " + se.Message)));
+                    }
                 }
             }
             catch (Exception ex)
@@ -60,6 +67,7 @@ namespace Messanger
                 Invoke(new Action(() => MessageBox.Show("Error: " + ex.Message)));
             }
         }
+
 
         private void HandleClient(TcpClient client, string clientIP)
         {
