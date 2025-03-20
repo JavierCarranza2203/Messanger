@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,8 +11,8 @@ namespace Messanger
     public partial class Servidor : Form
     {
         private TcpListener server;
-        private TcpClient client;
-        private NetworkStream stream;
+        private List<TcpClient> clients = new List<TcpClient>();
+        private List<string> clientIPs = new List<string>(); // Para mostrar las IPs de los clientes
         private Thread serverThread;
 
         public Servidor()
@@ -38,18 +39,102 @@ namespace Messanger
 
                 while (true)
                 {
-                    client = server.AcceptTcpClient();
-                    stream = client.GetStream();
-                    Invoke(new Action(() => listMessages.Items.Add("Cliente conectado.")));
+                    try
+                    {
+                        TcpClient client = server.AcceptTcpClient();
+                        IPEndPoint clientEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
 
-                    Thread receiveThread = new Thread(ReceiveMessages);
-                    receiveThread.IsBackground = true;
-                    receiveThread.Start();
+                        lock (clients)
+                        {
+                            clients.Add(client);
+                            clientIPs.Add(clientEndPoint.Address.ToString());
+                        }
+
+                        Invoke(new Action(() => listMessages.Items.Add($"Cliente conectado desde {clientEndPoint.Address}")));
+
+                        Thread clientThread = new Thread(() => HandleClient(client, clientEndPoint.Address.ToString()));
+                        clientThread.IsBackground = true;
+                        clientThread.Start();
+                    }
+                    catch (SocketException se)
+                    {
+                        Invoke(new Action(() => listMessages.Items.Add("Error al aceptar cliente: " + se.Message)));
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Invoke(new Action(() => MessageBox.Show("Error: " + ex.Message)));
+            }
+        }
+
+
+        private void HandleClient(TcpClient client, string clientIP)
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            try
+            {
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    string fullMessage = $"{clientIP}: {message}";
+
+                    Invoke(new Action(() => listMessages.Items.Add(fullMessage)));
+
+                    // Enviar mensaje a todos los clientes conectados
+                    BroadcastMessage(fullMessage, client);
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                lock (clients)
+                {
+                    clients.Remove(client);
+                    clientIPs.Remove(clientIP);
+                }
+                client.Close();
+                Invoke(new Action(() => listMessages.Items.Add($"Cliente {clientIP} desconectado")));
+            }
+        }
+
+        private void BroadcastMessage(string message, TcpClient sender)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+
+            lock (clients)
+            {
+                foreach (TcpClient client in clients)
+                {
+                    if (client != sender) // No enviar el mensaje al que lo envió
+                    {
+                        try
+                        {
+                            NetworkStream stream = client.GetStream();
+                            stream.Write(data, 0, data.Length);
+                        }
+                        catch { }
+                    }
+                }
+            }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            if (clients.Count > 0)
+            {
+                string localIP = GetLocalIPAddress();
+                string fullMessage = $"{localIP}: {txtMessage.Text}";
+                listMessages.Items.Add(fullMessage);
+                BroadcastMessage(fullMessage, null);
+                txtMessage.Clear();
+            }
+            else
+            {
+                MessageBox.Show("No hay clientes conectados.");
             }
         }
 
@@ -66,49 +151,6 @@ namespace Messanger
                 }
             }
             return localIP;
-        }
-
-        private void ReceiveMessages()
-        {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while (true)
-            {
-                try
-                {
-                    bytesRead = stream.Read(buffer, 0, buffer.Length);
-                    if (bytesRead == 0) break;
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Invoke(new Action(() => listMessages.Items.Add("Cliente: " + message)));
-                }
-                catch (Exception ex)
-                {
-                    Invoke(new Action(() => listMessages.Items.Add("Error recibiendo mensaje: " + ex.Message)));
-                    break;
-                }
-            }
-        }
-
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            if (client != null && client.Connected)
-            {
-                try
-                {
-                    byte[] message = Encoding.UTF8.GetBytes(txtMessage.Text);
-                    stream.Write(message, 0, message.Length);
-                    Invoke(new Action(() => listMessages.Items.Add("Yo: " + txtMessage.Text)));
-                    txtMessage.Clear();
-                }
-                catch (Exception ex)
-                {
-                    Invoke(new Action(() => MessageBox.Show("Error enviando mensaje: " + ex.Message)));
-                }
-            }
-            else
-            {
-                MessageBox.Show("No estás conectado al servidor.");
-            }
         }
     }
 }

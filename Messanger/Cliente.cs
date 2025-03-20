@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Messanger
@@ -17,11 +12,30 @@ namespace Messanger
         private TcpClient client;
         private NetworkStream stream;
         private Thread receiveThread;
+
         public Cliente()
         {
             InitializeComponent();
         }
 
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                client = new TcpClient();
+                client.Connect(txtServerIP.Text, 5000);
+                stream = client.GetStream();
+                listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
+
+                receiveThread = new Thread(ReceiveMessages);
+                receiveThread.IsBackground = true;
+                receiveThread.Start();
+            }
+            catch (SocketException ex)
+            {
+                MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
+            }
+        }
 
 
         private void ReceiveMessages()
@@ -35,7 +49,7 @@ namespace Messanger
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Invoke(new Action(() => listMessages.Items.Add("Servidor: " + message)));
+                    Invoke(new Action(() => listMessages.Items.Add(message)));
                 }
                 catch
                 {
@@ -44,41 +58,39 @@ namespace Messanger
             }
         }
 
-
-
-
-
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (stream != null)
             {
-                byte[] message = Encoding.UTF8.GetBytes(txtMessage.Text);
-                stream.Write(message, 0, message.Length);
-                listMessages.Items.Add("Cliente: " + txtMessage.Text);
-                txtMessage.Clear();
+                try
+                {
+                    string clientIP = GetLocalIPAddress();
+                    string fullMessage = $"{clientIP}: {txtMessage.Text}";
+                    byte[] message = Encoding.UTF8.GetBytes(fullMessage);
+                    stream.Write(message, 0, message.Length);
+                    listMessages.Items.Add(fullMessage);
+                    txtMessage.Clear();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error enviando mensaje: " + ex.Message);
+                }
             }
         }
 
-        private void btnConnect_Click(object sender, EventArgs e)
+        private string GetLocalIPAddress()
         {
-            try
+            string localIP = "";
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
             {
-                client = new TcpClient(txtServerIP.Text, 5000);
-                stream = client.GetStream();
-                listMessages.Items.Add("Conectado al servidor");
-
-                receiveThread = new Thread(ReceiveMessages);
-                receiveThread.IsBackground = true;
-                receiveThread.Start();
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    localIP = ip.ToString();
+                    break;
+                }
             }
-            catch (SocketException ex)
-            {
-                MessageBox.Show("Error de conexión: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
+            return localIP;
         }
     }
 }
