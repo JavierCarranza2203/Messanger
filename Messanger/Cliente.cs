@@ -48,8 +48,9 @@ namespace Messanger
                 {
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Invoke(new Action(() => listMessages.Items.Add(message)));
+                    string mensajeEncriptado = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                    Invoke(new Action(() => listMessages.Items.Add(ServicioDeEncriptado.DecryptString(mensajeEncriptado))));
                 }
                 catch
                 {
