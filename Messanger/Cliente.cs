@@ -68,7 +68,7 @@ namespace Messanger
                     string fullMessage = $"{clientIP}: {txtMessage.Text}";
                     byte[] message = Encoding.UTF8.GetBytes(fullMessage);
                     stream.Write(message, 0, message.Length);
-                    listMessages.Items.Add(fullMessage);
+                    listMessages.Items.Add(ServicioDeEncriptado.EncriptarCadena(fullMessage));
                     txtMessage.Clear();
                 }
                 catch (Exception ex)
