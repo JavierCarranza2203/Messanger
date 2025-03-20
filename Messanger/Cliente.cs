@@ -66,9 +66,9 @@ namespace Messanger
                 {
                     string clientIP = GetLocalIPAddress();
                     string fullMessage = $"{clientIP}: {txtMessage.Text}";
-                    byte[] message = Encoding.UTF8.GetBytes(fullMessage);
+                    byte[] message = Encoding.UTF8.GetBytes(ServicioDeEncriptado.EncriptarCadena(fullMessage));
                     stream.Write(message, 0, message.Length);
-                    listMessages.Items.Add(ServicioDeEncriptado.EncriptarCadena(fullMessage));
+                    listMessages.Items.Add(fullMessage);
                     txtMessage.Clear();
                 }
                 catch (Exception ex)
