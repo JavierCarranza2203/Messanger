@@ -103,7 +103,7 @@ namespace Messanger
 
         private void BroadcastMessage(string message, TcpClient sender)
         {
-            byte[] data = Encoding.UTF8.GetBytes(message);
+            byte[] data = Encoding.UTF8.GetBytes(ServicioDeEncriptado.EncriptarCadena(message));
 
             lock (clients)
             {
