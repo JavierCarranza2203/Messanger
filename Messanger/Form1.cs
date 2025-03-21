@@ -5,12 +5,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.IO;
+
 
 namespace Messanger
 {
     public partial class Servidor : Form
     {
         private TcpListener server;
+        private NetworkStream stream;
         private List<TcpClient> clients = new List<TcpClient>();
         private List<string> clientIPs = new List<string>(); // Para mostrar las IPs de los clientes
         private Thread serverThread;
@@ -72,20 +75,50 @@ namespace Messanger
         private void HandleClient(TcpClient client, string clientIP)
         {
             NetworkStream stream = client.GetStream();
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096]; // Tamaño del buffer
             int bytesRead;
 
             try
             {
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    string fullMessage = $"{ServicioDeEncriptado.DecryptString(message)}";
+                    string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                    Invoke(new Action(() => listMessages.Items.Add(fullMessage)));
+                    if (receivedData.StartsWith("[FILE]"))
+                    {
+                        // Extraer información del archivo
+                        string[] parts = receivedData.Split('|');
+                        string fileName = parts[1];
+                        int fileSize = int.Parse(parts[2]);
 
-                    // Enviar mensaje a todos los clientes conectados
-                    BroadcastMessage(fullMessage, client);
+                        Invoke(new Action(() => listMessages.Items.Add($"Recibiendo archivo: {fileName} ({fileSize} bytes)")));
+
+                        // Recibir los bytes del archivo
+                        byte[] fileBuffer = new byte[fileSize];
+                        int totalReceived = 0;
+                        while (totalReceived < fileSize)
+                        {
+                            int remaining = fileSize - totalReceived;
+                            int chunkSize = Math.Min(4096, remaining);
+                            int chunkRead = stream.Read(fileBuffer, totalReceived, chunkSize);
+                            totalReceived += chunkRead;
+                        }
+
+                        // Guardar el archivo en el escritorio
+                        string savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+                        File.WriteAllBytes(savePath, fileBuffer);
+
+                        Invoke(new Action(() => listMessages.Items.Add($"Archivo guardado en: {savePath}")));
+                    }
+                    else
+                    {
+                        // Es un mensaje normal, lo desencriptamos y mostramos
+                        string fullMessage = $"{ServicioDeEncriptado.DecryptString(receivedData)}";
+                        Invoke(new Action(() => listMessages.Items.Add(fullMessage)));
+
+                        // Enviar mensaje a todos los clientes conectados
+                        BroadcastMessage(fullMessage, client);
+                    }
                 }
             }
             catch (Exception) { }
@@ -151,6 +184,60 @@ namespace Messanger
                 }
             }
             return localIP;
+        }
+
+        private void btnSendFile_Click(object sender, EventArgs e)
+        {
+            if (clients.Count == 0)
+            {
+                MessageBox.Show("No hay clientes conectados.");
+                return;
+            }
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                byte[] fileData = File.ReadAllBytes(filePath);
+                string fileName = Path.GetFileName(filePath);
+                int fileSize = fileData.Length;
+
+                // Enviar encabezado del archivo
+                string header = $"[FILE]|{fileName}|{fileSize}";
+                byte[] headerBytes = Encoding.UTF8.GetBytes(header);
+
+                lock (clients)
+                {
+                    foreach (TcpClient client in clients)
+                    {
+                        try
+                        {
+                            NetworkStream clientStream = client.GetStream();
+                            clientStream.Write(headerBytes, 0, headerBytes.Length);
+                            Thread.Sleep(100); // Evita colisiones de paquetes
+
+                            // Enviar archivo en bloques de 4096 bytes
+                            int bufferSize = 4096;
+                            int totalSent = 0;
+                            while (totalSent < fileSize)
+                            {
+                                int remaining = fileSize - totalSent;
+                                int chunkSize = Math.Min(bufferSize, remaining);
+                                byte[] buffer = new byte[chunkSize];
+                                Array.Copy(fileData, totalSent, buffer, 0, chunkSize);
+                                clientStream.Write(buffer, 0, chunkSize);
+                                totalSent += chunkSize;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            listMessages.Items.Add("Error al enviar archivo: " + ex.Message);
+                        }
+                    }
+                }
+
+                listMessages.Items.Add("Archivo enviado: " + fileName);
+            }
         }
     }
 }

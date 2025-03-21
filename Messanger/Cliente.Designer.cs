@@ -34,6 +34,7 @@
             txtServerIP = new TextBox();
             txtMessage = new TextBox();
             label1 = new Label();
+            btnSendFile = new Button();
             SuspendLayout();
             // 
             // btnConnect
@@ -89,11 +90,22 @@
             label1.TabIndex = 5;
             label1.Text = "IP del servidor";
             // 
+            // btnSendFile
+            // 
+            btnSendFile.Location = new Point(452, 136);
+            btnSendFile.Name = "btnSendFile";
+            btnSendFile.Size = new Size(108, 23);
+            btnSendFile.TabIndex = 6;
+            btnSendFile.Text = "Enviar Archivo";
+            btnSendFile.UseVisualStyleBackColor = true;
+            btnSendFile.Click += btnSendFile_Click;
+            // 
             // Cliente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnSendFile);
             Controls.Add(label1);
             Controls.Add(txtMessage);
             Controls.Add(txtServerIP);
@@ -114,5 +126,6 @@
         private TextBox txtServerIP;
         private TextBox txtMessage;
         private Label label1;
+        private Button btnSendFile;
     }
 }

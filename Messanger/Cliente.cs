@@ -40,17 +40,48 @@ namespace Messanger
 
         private void ReceiveMessages()
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int bytesRead;
+
             while (true)
             {
                 try
                 {
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
-                    string mensajeEncriptado = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                    Invoke(new Action(() => listMessages.Items.Add(ServicioDeEncriptado.DecryptString(mensajeEncriptado))));
+                    string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                    if (receivedData.StartsWith("[FILE]"))
+                    {
+                        // Extraer información del archivo
+                        string[] parts = receivedData.Split('|');
+                        string fileName = parts[1];
+                        int fileSize = int.Parse(parts[2]);
+
+                        Invoke(new Action(() => listMessages.Items.Add($"Recibiendo archivo: {fileName} ({fileSize} bytes)")));
+
+                        // Recibir el archivo en bloques
+                        byte[] fileBuffer = new byte[fileSize];
+                        int totalReceived = 0;
+                        while (totalReceived < fileSize)
+                        {
+                            int remaining = fileSize - totalReceived;
+                            int chunkSize = Math.Min(4096, remaining);
+                            int chunkRead = stream.Read(fileBuffer, totalReceived, chunkSize);
+                            totalReceived += chunkRead;
+                        }
+
+                        // Guardar el archivo en el escritorio
+                        string savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+                        File.WriteAllBytes(savePath, fileBuffer);
+
+                        Invoke(new Action(() => listMessages.Items.Add($"Archivo guardado en: {savePath}")));
+                    }
+                    else
+                    {
+                        Invoke(new Action(() => listMessages.Items.Add(ServicioDeEncriptado.DecryptString(receivedData))));
+                    }
                 }
                 catch
                 {
@@ -58,6 +89,7 @@ namespace Messanger
                 }
             }
         }
+
 
         private void btnSend_Click(object sender, EventArgs e)
         {
@@ -92,6 +124,45 @@ namespace Messanger
                 }
             }
             return localIP;
+        }
+
+        private void btnSendFile_Click(object sender, EventArgs e)
+        {
+            if (stream == null)
+            {
+                MessageBox.Show("No estás conectado al servidor.");
+                return;
+            }
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                byte[] fileData = File.ReadAllBytes(filePath);
+                string fileName = Path.GetFileName(filePath);
+                int fileSize = fileData.Length;
+
+                // Enviar encabezado del archivo
+                string header = $"[FILE]|{fileName}|{fileSize}";
+                byte[] headerBytes = Encoding.UTF8.GetBytes(header);
+                stream.Write(headerBytes, 0, headerBytes.Length);
+                Thread.Sleep(100);
+
+                // Enviar archivo en bloques de 4096 bytes
+                int bufferSize = 4096;
+                int totalSent = 0;
+                while (totalSent < fileSize)
+                {
+                    int remaining = fileSize - totalSent;
+                    int chunkSize = Math.Min(bufferSize, remaining);
+                    byte[] buffer = new byte[chunkSize];
+                    Array.Copy(fileData, totalSent, buffer, 0, chunkSize);
+                    stream.Write(buffer, 0, chunkSize);
+                    totalSent += chunkSize;
+                }
+
+                listMessages.Items.Add("Archivo enviado: " + fileName);
+            }
         }
     }
 }

@@ -32,6 +32,7 @@
             btnStartServer = new Button();
             btnSend = new Button();
             txtMessage = new TextBox();
+            btnSendFile = new Button();
             SuspendLayout();
             // 
             // listMessages
@@ -71,11 +72,22 @@
             txtMessage.Size = new Size(338, 89);
             txtMessage.TabIndex = 3;
             // 
+            // btnSendFile
+            // 
+            btnSendFile.Location = new Point(517, 145);
+            btnSendFile.Name = "btnSendFile";
+            btnSendFile.Size = new Size(104, 23);
+            btnSendFile.TabIndex = 4;
+            btnSendFile.Text = "Enviar archivo";
+            btnSendFile.UseVisualStyleBackColor = true;
+            btnSendFile.Click += btnSendFile_Click;
+            // 
             // Servidor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnSendFile);
             Controls.Add(txtMessage);
             Controls.Add(btnSend);
             Controls.Add(btnStartServer);
@@ -92,5 +104,6 @@
         private Button btnStartServer;
         private Button btnSend;
         private TextBox txtMessage;
+        private Button btnSendFile;
     }
 }
