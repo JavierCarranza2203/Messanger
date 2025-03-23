@@ -40,12 +40,12 @@ namespace Messanger
 
         private void pnl_servidor_Click(object sender, EventArgs e)
         {
-            btn_servidor.PerformClick();
+            //btn_servidor.PerformClick();
         }
 
         private void pnl_cliente_Click(object sender, EventArgs e)
         {
-            btn_cliente.PerformClick();
+            //btn_cliente.PerformClick();
         }
     }
 }

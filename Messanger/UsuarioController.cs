@@ -26,7 +26,7 @@ namespace Messanger
                     {
                         if (reader.Read())
                         {
-                            return new Usuario(reader.GetInt32("id"), reader.GetString("nombre"), "", reader.GetBoolean("esAdmin"));
+                            return new Usuario(reader.GetInt32("id"), reader.GetString("nombre"), "", reader.GetBoolean("esServidor"));
                         }
                         else
                         {

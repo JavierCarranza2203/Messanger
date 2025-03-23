@@ -17,7 +17,7 @@ namespace Messanger
         public IniciarSesion(bool esAdmin)
         {
             InitializeComponent();
-            this.Enabled = esAdmin;
+            this.esAdmin = esAdmin;
         }
 
         private void btnIniciarSesion_Click(object sender, EventArgs e)
