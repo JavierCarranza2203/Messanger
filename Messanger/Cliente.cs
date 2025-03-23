@@ -24,6 +24,29 @@ namespace Messanger
                 if (ipForm.ShowDialog() == DialogResult.OK)
                 {
                     txtServerIP.Text = ipForm.ServerIP;
+
+
+                    try
+                    {
+                        client = new TcpClient();
+                        client.Connect(txtServerIP.Text, 5000);
+                        stream = client.GetStream();
+                        listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
+
+                        receiveThread = new Thread(ReceiveMessages);
+                        receiveThread.IsBackground = true;
+                        receiveThread.Start();
+                    }
+                    catch (SocketException ex)
+                    {
+                        MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
+                    }
+
+
+
+
+
+
                 }
                 else
                 {
@@ -41,24 +64,24 @@ namespace Messanger
 
 
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                client = new TcpClient();
-                client.Connect(txtServerIP.Text, 5000);
-                stream = client.GetStream();
-                listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
+        //private void btnConnect_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        client = new TcpClient();
+        //        client.Connect(txtServerIP.Text, 5000);
+        //        stream = client.GetStream();
+        //        listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
 
-                receiveThread = new Thread(ReceiveMessages);
-                receiveThread.IsBackground = true;
-                receiveThread.Start();
-            }
-            catch (SocketException ex)
-            {
-                MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
-            }
-        }
+        //        receiveThread = new Thread(ReceiveMessages);
+        //        receiveThread.IsBackground = true;
+        //        receiveThread.Start();
+        //    }
+        //    catch (SocketException ex)
+        //    {
+        //        MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
+        //    }
+        //}
 
         private void ReceiveMessages()
         {

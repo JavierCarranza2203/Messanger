@@ -28,42 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnConnect = new Button();
-            txtServerIP = new TextBox();
-            label1 = new Label();
             listMessages = new ListBox();
             btnSendFile = new Button();
             txtMessage = new TextBox();
             btnSend = new Button();
             label2 = new Label();
+            txtServerIP = new TextBox();
+            label1 = new Label();
             SuspendLayout();
-            // 
-            // btnConnect
-            // 
-            btnConnect.Location = new Point(775, 66);
-            btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(100, 23);
-            btnConnect.TabIndex = 0;
-            btnConnect.Text = "Conectar";
-            btnConnect.UseVisualStyleBackColor = true;
-            btnConnect.Click += btnConnect_Click;
-            // 
-            // txtServerIP
-            // 
-            txtServerIP.Location = new Point(775, 37);
-            txtServerIP.Name = "txtServerIP";
-            txtServerIP.Size = new Size(100, 23);
-            txtServerIP.TabIndex = 3;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(775, 19);
-            label1.Name = "label1";
-            label1.Size = new Size(81, 15);
-            label1.TabIndex = 5;
-            label1.Text = "IP del servidor";
             // 
             // listMessages
             // 
@@ -123,6 +95,23 @@
             label2.TabIndex = 11;
             label2.Text = "WAZAGRAM™";
             // 
+            // txtServerIP
+            // 
+            txtServerIP.Location = new Point(775, 37);
+            txtServerIP.Name = "txtServerIP";
+            txtServerIP.Size = new Size(100, 23);
+            txtServerIP.TabIndex = 3;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.White;
+            label1.Location = new Point(775, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(81, 15);
+            label1.TabIndex = 5;
+            label1.Text = "IP del servidor";
+            // 
             // Cliente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -136,7 +125,6 @@
             Controls.Add(listMessages);
             Controls.Add(label1);
             Controls.Add(txtServerIP);
-            Controls.Add(btnConnect);
             Name = "Cliente";
             Text = "Cliente";
             ResumeLayout(false);
@@ -144,14 +132,12 @@
         }
 
         #endregion
-
-        private Button btnConnect;
-        private TextBox txtServerIP;
-        private Label label1;
         private ListBox listMessages;
         private Button btnSendFile;
         private TextBox txtMessage;
         private Button btnSend;
         private Label label2;
+        private TextBox txtServerIP;
+        private Label label1;
     }
 }
