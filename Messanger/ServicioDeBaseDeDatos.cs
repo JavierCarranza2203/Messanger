@@ -20,9 +20,11 @@ namespace Messanger
             if (!Directory.Exists(_strCarpeta)) { return false; }
             if (!File.Exists(_strArchivo)) { return false; }
 
+            ServicioDeArchivosJSON<DataBaseConnection> servicioJson = new ServicioDeArchivosJSON<DataBaseConnection>();
+
             string cadena = servicioJson.LeerJSON(_strArchivo);
 
-            _connection = servicioJson.DeserializarJSON(ServicioDeEncriptado.DecryptString(cadena));
+            _connection = servicioJson.DeserializarJSON(ServicioDeEncriptado.DesencriptarCadena(cadena));
             return true;
         }
 
