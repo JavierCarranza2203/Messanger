@@ -37,6 +37,8 @@
             // 
             // listMessages
             // 
+            listMessages.BackColor = SystemColors.ActiveCaptionText;
+            listMessages.ForeColor = Color.White;
             listMessages.FormattingEnabled = true;
             listMessages.ItemHeight = 15;
             listMessages.Location = new Point(1, 0);
@@ -46,6 +48,7 @@
             // 
             // btnStartServer
             // 
+            btnStartServer.Font = new Font("Futura Hv BT", 9F);
             btnStartServer.Location = new Point(450, 12);
             btnStartServer.Name = "btnStartServer";
             btnStartServer.Size = new Size(338, 34);
@@ -56,6 +59,7 @@
             // 
             // btnSend
             // 
+            btnSend.Font = new Font("Futura Hv BT", 9F);
             btnSend.Location = new Point(450, 323);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(338, 23);
@@ -74,18 +78,21 @@
             // 
             // btnSendFile
             // 
-            btnSendFile.Location = new Point(517, 145);
+            btnSendFile.BackColor = Color.White;
+            btnSendFile.Font = new Font("Futura Hv BT", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSendFile.Location = new Point(450, 143);
             btnSendFile.Name = "btnSendFile";
-            btnSendFile.Size = new Size(104, 23);
+            btnSendFile.Size = new Size(127, 45);
             btnSendFile.TabIndex = 4;
             btnSendFile.Text = "Enviar archivo";
-            btnSendFile.UseVisualStyleBackColor = true;
+            btnSendFile.UseVisualStyleBackColor = false;
             btnSendFile.Click += btnSendFile_Click;
             // 
             // Servidor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Black;
             ClientSize = new Size(800, 450);
             Controls.Add(btnSendFile);
             Controls.Add(txtMessage);
