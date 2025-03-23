@@ -50,8 +50,7 @@ namespace Messanger
 
                 MessageBox.Show("Archivo y conexión creados correctamente");
 
-                Cliente frmCliente = new Cliente();
-                frmCliente.ShowDialog();
+                this.Close();
             }
             catch (Exception ex) 
             {

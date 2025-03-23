@@ -18,39 +18,23 @@ namespace Messanger
         {
             InitializeComponent();
 
+            ServicioDeBaseDeDatos.InicializarConexion();
+            txtServerIP.Text = ServicioDeBaseDeDatos.ObtenerObjeto().Host;
 
-            using (InputForm ipForm = new InputForm())
+            try
             {
-                if (ipForm.ShowDialog() == DialogResult.OK)
-                {
-                    ServicioDeBaseDeDatos.InicializarConexion();
-                    txtServerIP.Text = ServicioDeBaseDeDatos.ObtenerObjeto().Host;
+                client = new TcpClient();
+                client.Connect(txtServerIP.Text, 5000);
+                stream = client.GetStream();
+                listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
 
-                    try
-                    {
-                        client = new TcpClient();
-                        client.Connect(txtServerIP.Text, 5000);
-                        stream = client.GetStream();
-                        listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
-
-                        receiveThread = new Thread(ReceiveMessages);
-                        receiveThread.IsBackground = true;
-                        receiveThread.Start();
-                    }
-                    catch (SocketException ex)
-                    {
-                        MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Debes ingresar una IP para conectarte.");
-                    this.Close(); // Cierra la app si no ingresa IP
-                }
-
-
-
-
+                receiveThread = new Thread(ReceiveMessages);
+                receiveThread.IsBackground = true;
+                receiveThread.Start();
+            }
+            catch (SocketException ex)
+            {
+                MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
             }
         }
 
