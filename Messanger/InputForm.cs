@@ -16,7 +16,6 @@ namespace Messanger
         {
             InitializeComponent();
         }
-        public string ServerIP { get; private set; }
 
         private void InputForm_Load(object sender, EventArgs e)
         {

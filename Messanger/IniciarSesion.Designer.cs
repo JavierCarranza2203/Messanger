@@ -30,10 +30,10 @@
         {
             label1 = new Label();
             label2 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            txtUsuario = new TextBox();
+            txtContrasenia = new TextBox();
             label3 = new Label();
-            button1 = new Button();
+            btnIniciarSesion = new Button();
             label4 = new Label();
             SuspendLayout();
             // 
@@ -60,21 +60,21 @@
             label2.TabIndex = 4;
             label2.Text = "Usuario:";
             // 
-            // textBox1
+            // txtUsuario
             // 
-            textBox1.Font = new Font("Segoe UI", 12F);
-            textBox1.Location = new Point(45, 154);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(633, 50);
-            textBox1.TabIndex = 5;
+            txtUsuario.Font = new Font("Segoe UI", 12F);
+            txtUsuario.Location = new Point(45, 154);
+            txtUsuario.Name = "txtUsuario";
+            txtUsuario.Size = new Size(633, 50);
+            txtUsuario.TabIndex = 5;
             // 
-            // textBox2
+            // txtContrasenia
             // 
-            textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(45, 274);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(633, 50);
-            textBox2.TabIndex = 7;
+            txtContrasenia.Font = new Font("Segoe UI", 12F);
+            txtContrasenia.Location = new Point(45, 274);
+            txtContrasenia.Name = "txtContrasenia";
+            txtContrasenia.Size = new Size(633, 50);
+            txtContrasenia.TabIndex = 7;
             // 
             // label3
             // 
@@ -86,25 +86,28 @@
             label3.TabIndex = 6;
             label3.Text = "Contraseña:";
             // 
-            // button1
+            // btnIniciarSesion
             // 
-            button1.BackColor = Color.White;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            button1.ForeColor = SystemColors.ControlText;
-            button1.Location = new Point(45, 470);
-            button1.Name = "button1";
-            button1.Size = new Size(633, 85);
-            button1.TabIndex = 8;
-            button1.Text = "Iniciar sesión";
-            button1.UseVisualStyleBackColor = false;
+            btnIniciarSesion.BackColor = Color.White;
+            btnIniciarSesion.FlatStyle = FlatStyle.Flat;
+            btnIniciarSesion.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnIniciarSesion.ForeColor = SystemColors.ControlText;
+            btnIniciarSesion.Location = new Point(45, 470);
+            btnIniciarSesion.Name = "btnIniciarSesion";
+            btnIniciarSesion.Size = new Size(633, 85);
+            btnIniciarSesion.TabIndex = 8;
+            btnIniciarSesion.Text = "Iniciar sesión";
+            btnIniciarSesion.UseVisualStyleBackColor = false;
+            btnIniciarSesion.Click += btnIniciarSesion_Click;
             // 
             // label4
             // 
             label4.AutoSize = true;
+            label4.Cursor = Cursors.Hand;
+            label4.Font = new Font("Segoe UI", 10F, FontStyle.Underline);
             label4.Location = new Point(45, 339);
             label4.Name = "label4";
-            label4.Size = new Size(528, 32);
+            label4.Size = new Size(580, 37);
             label4.TabIndex = 9;
             label4.Text = "¿No tiene una cuenta u olvidó sus credenciales?";
             // 
@@ -115,10 +118,10 @@
             BackColor = Color.Black;
             ClientSize = new Size(733, 585);
             Controls.Add(label4);
-            Controls.Add(button1);
-            Controls.Add(textBox2);
+            Controls.Add(btnIniciarSesion);
+            Controls.Add(txtContrasenia);
             Controls.Add(label3);
-            Controls.Add(textBox1);
+            Controls.Add(txtUsuario);
             Controls.Add(label2);
             Controls.Add(label1);
             ForeColor = SystemColors.ControlLightLight;
@@ -132,10 +135,10 @@
 
         private Label label1;
         private Label label2;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtUsuario;
+        private TextBox txtContrasenia;
         private Label label3;
-        private Button button1;
+        private Button btnIniciarSesion;
         private Label label4;
     }
 }

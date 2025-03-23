@@ -23,8 +23,8 @@ namespace Messanger
             {
                 if (ipForm.ShowDialog() == DialogResult.OK)
                 {
-                    txtServerIP.Text = ipForm.ServerIP;
-
+                    ServicioDeBaseDeDatos.InicializarConexion();
+                    txtServerIP.Text = ServicioDeBaseDeDatos.ObtenerObjeto().Host;
 
                     try
                     {
@@ -41,12 +41,6 @@ namespace Messanger
                     {
                         MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
                     }
-
-
-
-
-
-
                 }
                 else
                 {
