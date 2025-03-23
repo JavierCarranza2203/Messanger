@@ -30,5 +30,34 @@ namespace Messanger
                 ServerForm.Show();
             }
         }
+
+        private void btn_servidor_Click(object sender, EventArgs e)
+        {
+            Servidor ServerForm = new Servidor();
+            ServerForm.Show();
+        }
+
+        private void btn_cliente_Click(object sender, EventArgs e)
+        {
+            Cliente clientForm = new Cliente();
+            clientForm.Show();
+        }
+
+        private void panel2_Click(object sender, EventArgs e)
+        {
+            Cliente clientForm = new Cliente();
+            clientForm.Show();
+        }
+
+        private void pnl_servidor_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnl_servidor_Click(object sender, EventArgs e)
+        {
+            Servidor ServerForm = new Servidor();
+            ServerForm.Show();
+        }
     }
 }
