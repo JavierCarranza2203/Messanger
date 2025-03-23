@@ -10,7 +10,7 @@ namespace Messanger
     internal class ServicioDeBaseDeDatos
     {
         private static readonly string _strProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        private static readonly string _strCarpeta = Path.Combine(_strProgramFiles, "DigiRack");
+        private static readonly string _strCarpeta = Path.Combine(_strProgramFiles, "Wazagram");
         private static readonly string _strArchivo = Path.Combine(_strCarpeta, "settings.enc");
 
         private static DataBaseConnection _connection;

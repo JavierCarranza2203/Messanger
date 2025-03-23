@@ -25,15 +25,39 @@ namespace Messanger
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtServerIP.Text))
+            try
             {
-                MessageBox.Show("Por favor, ingresa una IP válida.");
-                return;
-            }
+                foreach (Control c in this.Controls)
+                {
+                    if (c is TextBox && c.Text == string.Empty)
+                        throw new ArgumentException("Debe llenar todos los campos");
+                }
 
-            ServerIP = txtServerIP.Text;
-            DialogResult = DialogResult.OK;
-            this.Close();
+                DataBaseConnection miConexion = new DataBaseConnection(
+                    txtDbUser.Text, 
+                    txtDbPassword.Text, 
+                    txtServerIP.Text, 
+                    txtDbPort.Text, 
+                    txtDbName.Text
+                );
+
+                ServicioDeBaseDeDatos.CrearArchivoDeConexion(miConexion);
+
+                if (ServicioDeBaseDeDatos.InicializarConexion() == false)
+                    throw new Exception("No es posible crear el archivo de conexión, verifique que WAZAGRAM se ejecuta como administrador");
+
+                if (ServicioDeBaseDeDatos.ProbarConexion() == false)
+                    throw new Exception("No es posible establecer la conexión, verifique los datos");
+
+                MessageBox.Show("Archivo y conexión creados correctamente");
+
+                Cliente frmCliente = new Cliente();
+                frmCliente.ShowDialog();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

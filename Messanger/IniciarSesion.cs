@@ -10,16 +10,13 @@ using System.Windows.Forms;
 
 namespace Messanger
 {
-    public partial class frmIniciarSesion : Form
+    public partial class IniciarSesion : Form
     {
-        public frmIniciarSesion()
+        private bool esAdmin;
+        public IniciarSesion(bool esAdmin)
         {
             InitializeComponent();
-        }
-
-        private void btnIniciarSesion_Click(object sender, EventArgs e)
-        {
-
+            this.Enabled = esAdmin;
         }
     }
 }

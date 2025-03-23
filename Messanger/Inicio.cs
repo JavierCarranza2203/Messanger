@@ -17,47 +17,35 @@ namespace Messanger
             InitializeComponent();
         }
 
-        private void btnAceptar_Click(object sender, EventArgs e)
-        {
-            if (radCliente.Checked == true)
-            {
-                Cliente clientForm = new Cliente();
-                clientForm.Show();
-            }
-            else if (radServer.Checked == true)
-            {
-                Servidor ServerForm = new Servidor();
-                ServerForm.Show();
-            }
-        }
-
         private void btn_servidor_Click(object sender, EventArgs e)
         {
-            Servidor ServerForm = new Servidor();
-            ServerForm.Show();
+            IniciarSesion iniciarSesion = new IniciarSesion(true);
+            iniciarSesion.ShowDialog();
         }
 
         private void btn_cliente_Click(object sender, EventArgs e)
         {
-            Cliente clientForm = new Cliente();
-            clientForm.Show();
-        }
-
-        private void panel2_Click(object sender, EventArgs e)
-        {
-            Cliente clientForm = new Cliente();
-            clientForm.Show();
-        }
-
-        private void pnl_servidor_Paint(object sender, PaintEventArgs e)
-        {
-
+            if (ServicioDeBaseDeDatos.InicializarConexion())
+            {
+                IniciarSesion iniciarSesion = new IniciarSesion(false);
+                iniciarSesion.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Para entrar como cliente debe configurar las conexiones", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                InputForm form = new InputForm();
+                form.ShowDialog();
+            }
         }
 
         private void pnl_servidor_Click(object sender, EventArgs e)
         {
-            Servidor ServerForm = new Servidor();
-            ServerForm.Show();
+            btn_servidor.PerformClick();
+        }
+
+        private void pnl_cliente_Click(object sender, EventArgs e)
+        {
+            btn_cliente.PerformClick();
         }
     }
 }

@@ -31,21 +31,21 @@
             radServer = new RadioButton();
             radCliente = new RadioButton();
             label1 = new Label();
-            btnAceptar = new Button();
             btn_servidor = new Button();
             btn_cliente = new Button();
             panel1 = new Panel();
             pnl_servidor = new Panel();
-            panel2 = new Panel();
+            pnl_cliente = new Panel();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
             // radServer
             // 
             radServer.AutoSize = true;
-            radServer.Location = new Point(12, 50);
+            radServer.Location = new Point(22, 107);
+            radServer.Margin = new Padding(6);
             radServer.Name = "radServer";
-            radServer.Size = new Size(68, 19);
+            radServer.Size = new Size(133, 36);
             radServer.TabIndex = 0;
             radServer.TabStop = true;
             radServer.Text = "Servidor";
@@ -54,9 +54,10 @@
             // radCliente
             // 
             radCliente.AutoSize = true;
-            radCliente.Location = new Point(12, 84);
+            radCliente.Location = new Point(22, 179);
+            radCliente.Margin = new Padding(6);
             radCliente.Name = "radCliente";
-            radCliente.Size = new Size(62, 19);
+            radCliente.Size = new Size(120, 36);
             radCliente.TabIndex = 1;
             radCliente.TabStop = true;
             radCliente.Text = "Cliente";
@@ -66,30 +67,22 @@
             // 
             label1.AutoSize = true;
             label1.BackColor = Color.Black;
-            label1.Font = new Font("Futura Hv BT", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(13, 26);
+            label1.Location = new Point(24, 55);
+            label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
-            label1.Size = new Size(178, 29);
+            label1.Size = new Size(339, 55);
             label1.TabIndex = 2;
             label1.Text = "WAZAGRAM™";
-            // 
-            // btnAceptar
-            // 
-            btnAceptar.Location = new Point(106, 61);
-            btnAceptar.Name = "btnAceptar";
-            btnAceptar.Size = new Size(52, 26);
-            btnAceptar.TabIndex = 3;
-            btnAceptar.Text = "-->";
-            btnAceptar.UseVisualStyleBackColor = true;
-            btnAceptar.Click += btnAceptar_Click;
             // 
             // btn_servidor
             // 
             btn_servidor.BackColor = Color.White;
-            btn_servidor.Location = new Point(13, 78);
+            btn_servidor.Location = new Point(24, 166);
+            btn_servidor.Margin = new Padding(6);
             btn_servidor.Name = "btn_servidor";
-            btn_servidor.Size = new Size(304, 358);
+            btn_servidor.Size = new Size(565, 764);
             btn_servidor.TabIndex = 4;
             btn_servidor.Text = "SERVIDOR";
             btn_servidor.UseVisualStyleBackColor = false;
@@ -98,9 +91,10 @@
             // btn_cliente
             // 
             btn_cliente.BackColor = Color.White;
-            btn_cliente.Location = new Point(320, 77);
+            btn_cliente.Location = new Point(594, 164);
+            btn_cliente.Margin = new Padding(6);
             btn_cliente.Name = "btn_cliente";
-            btn_cliente.Size = new Size(296, 358);
+            btn_cliente.Size = new Size(550, 764);
             btn_cliente.TabIndex = 5;
             btn_cliente.Text = "CLIENTE";
             btn_cliente.UseVisualStyleBackColor = false;
@@ -114,9 +108,10 @@
             panel1.Controls.Add(btn_cliente);
             panel1.Controls.Add(pnl_servidor);
             panel1.Controls.Add(btn_servidor);
-            panel1.Location = new Point(-1, -8);
+            panel1.Location = new Point(-2, -17);
+            panel1.Margin = new Padding(6);
             panel1.Name = "panel1";
-            panel1.Size = new Size(630, 452);
+            panel1.Size = new Size(1168, 962);
             panel1.TabIndex = 6;
             // 
             // pnl_servidor
@@ -124,37 +119,38 @@
             pnl_servidor.BackColor = SystemColors.ControlLightLight;
             pnl_servidor.BackgroundImage = Properties.Resources.Server_Transparent_Images_Clip_Art;
             pnl_servidor.BackgroundImageLayout = ImageLayout.Zoom;
-            pnl_servidor.Location = new Point(49, 131);
+            pnl_servidor.Location = new Point(91, 279);
+            pnl_servidor.Margin = new Padding(6);
             pnl_servidor.Name = "pnl_servidor";
-            pnl_servidor.Size = new Size(222, 245);
+            pnl_servidor.Size = new Size(412, 523);
             pnl_servidor.TabIndex = 8;
             pnl_servidor.Click += pnl_servidor_Click;
-            pnl_servidor.Paint += pnl_servidor_Paint;
             // 
-            // panel2
+            // pnl_cliente
             // 
-            panel2.BackColor = SystemColors.ControlLightLight;
-            panel2.BackgroundImage = Properties.Resources.client_7;
-            panel2.BackgroundImageLayout = ImageLayout.Zoom;
-            panel2.Location = new Point(354, 123);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(234, 245);
-            panel2.TabIndex = 7;
-            panel2.Click += panel2_Click;
+            pnl_cliente.BackColor = SystemColors.ControlLightLight;
+            pnl_cliente.BackgroundImage = Properties.Resources.client_7;
+            pnl_cliente.BackgroundImageLayout = ImageLayout.Zoom;
+            pnl_cliente.Location = new Point(657, 262);
+            pnl_cliente.Margin = new Padding(6);
+            pnl_cliente.Name = "pnl_cliente";
+            pnl_cliente.Size = new Size(435, 523);
+            pnl_cliente.TabIndex = 7;
+            pnl_cliente.Click += pnl_cliente_Click;
             // 
             // Inicio
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(628, 440);
+            ClientSize = new Size(1166, 939);
             ControlBox = false;
-            Controls.Add(panel2);
+            Controls.Add(pnl_cliente);
             Controls.Add(panel1);
-            Controls.Add(btnAceptar);
             Controls.Add(radServer);
             Controls.Add(radCliente);
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            Margin = new Padding(6);
             Name = "Inicio";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -167,11 +163,10 @@
         private RadioButton radServer;
         private RadioButton radCliente;
         private Label label1;
-        private Button btnAceptar;
         private Button btn_servidor;
         private Button btn_cliente;
         private Panel panel1;
-        private Panel panel2;
+        private Panel pnl_cliente;
         private Panel pnl_servidor;
     }
 }
