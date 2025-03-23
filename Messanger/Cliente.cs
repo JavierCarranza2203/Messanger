@@ -17,7 +17,29 @@ namespace Messanger
         public Cliente()
         {
             InitializeComponent();
+
+
+            using (InputForm ipForm = new InputForm())
+            {
+                if (ipForm.ShowDialog() == DialogResult.OK)
+                {
+                    txtServerIP.Text = ipForm.ServerIP;
+                }
+                else
+                {
+                    MessageBox.Show("Debes ingresar una IP para conectarte.");
+                    this.Close(); // Cierra la app si no ingresa IP
+                }
+
+
+
+
+            }
         }
+
+
+
+
 
         private void btnConnect_Click(object sender, EventArgs e)
         {

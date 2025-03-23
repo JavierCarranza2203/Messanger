@@ -68,7 +68,7 @@
             // listMessages
             // 
             listMessages.BackColor = SystemColors.ActiveCaptionText;
-            listMessages.Font = new Font("Futura Hv BT", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            listMessages.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             listMessages.ForeColor = Color.White;
             listMessages.FormattingEnabled = true;
             listMessages.Location = new Point(12, 73);
@@ -81,17 +81,18 @@
             btnSendFile.BackColor = Color.White;
             btnSendFile.BackgroundImage = Properties.Resources._1388902;
             btnSendFile.BackgroundImageLayout = ImageLayout.Zoom;
-            btnSendFile.Font = new Font("Futura Hv BT", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSendFile.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnSendFile.Location = new Point(862, 629);
             btnSendFile.Name = "btnSendFile";
             btnSendFile.Padding = new Padding(50);
             btnSendFile.Size = new Size(50, 50);
             btnSendFile.TabIndex = 10;
             btnSendFile.UseVisualStyleBackColor = false;
+            btnSendFile.Click += btnSendFile_Click;
             // 
             // txtMessage
             // 
-            txtMessage.Font = new Font("Futura Hv BT", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtMessage.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtMessage.Location = new Point(12, 515);
             txtMessage.Multiline = true;
             txtMessage.Name = "txtMessage";
@@ -102,22 +103,23 @@
             // 
             btnSend.BackgroundImage = Properties.Resources.send_icon_md;
             btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Font = new Font("Futura Hv BT", 9F);
+            btnSend.Font = new Font("Microsoft Sans Serif", 9F);
             btnSend.Location = new Point(862, 573);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(50, 50);
             btnSend.TabIndex = 8;
             btnSend.UseVisualStyleBackColor = true;
+            btnSend.Click += btnSend_Click;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.BackColor = Color.Black;
-            label2.Font = new Font("Futura Hv BT", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.White;
             label2.Location = new Point(12, 19);
             label2.Name = "label2";
-            label2.Size = new Size(178, 29);
+            label2.Size = new Size(167, 29);
             label2.TabIndex = 11;
             label2.Text = "WAZAGRAM™";
             // 
