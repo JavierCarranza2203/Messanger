@@ -19,12 +19,13 @@ namespace Messanger
             InitializeComponent();
 
             ServicioDeBaseDeDatos.InicializarConexion();
-            txtServerIP.Text = ServicioDeBaseDeDatos.ObtenerObjeto().Host;
+            DataBaseConnection miConn = ServicioDeBaseDeDatos.ObtenerObjeto();
 
             try
             {
+                MessageBox.Show(miConn.Host);
                 client = new TcpClient();
-                client.Connect(txtServerIP.Text, 5000);
+                client.Connect(miConn.Host, 5000);
                 stream = client.GetStream();
                 listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
 
@@ -37,29 +38,6 @@ namespace Messanger
                 MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
             }
         }
-
-
-
-
-
-        //private void btnConnect_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        client = new TcpClient();
-        //        client.Connect(txtServerIP.Text, 5000);
-        //        stream = client.GetStream();
-        //        listMessages.Items.Add($"Conectado al servidor {txtServerIP.Text}");
-
-        //        receiveThread = new Thread(ReceiveMessages);
-        //        receiveThread.IsBackground = true;
-        //        receiveThread.Start();
-        //    }
-        //    catch (SocketException ex)
-        //    {
-        //        MessageBox.Show("No se pudo conectar con el servidor: " + ex.Message);
-        //    }
-        //}
 
         private void ReceiveMessages()
         {

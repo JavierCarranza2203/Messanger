@@ -22,31 +22,37 @@ namespace Messanger
 
         private void btnIniciarSesion_Click(object sender, EventArgs e)
         {
-            if (txtContrasenia.Text == string.Empty || txtContrasenia.Text == string.Empty) throw new ArgumentException("Debe llenar todos los campos");
-
-            if (ServicioDeBaseDeDatos.InicializarConexion() == false) throw new Exception("Archivo de conexión no configurado");
-
-            using (MySqlConnection conn = ServicioDeBaseDeDatos.ObtenerConexion())
+            try
             {
-                Usuario miUsuario = UsuarioController.BuscarUsuario(conn, txtUsuario.Text, txtContrasenia.Text);
+                if (txtContrasenia.Text == string.Empty || txtContrasenia.Text == string.Empty) throw new ArgumentException("Debe llenar todos los campos");
 
-                if (esAdmin != miUsuario.EsAdmin)
+                if (ServicioDeBaseDeDatos.InicializarConexion() == false) throw new Exception("Archivo de conexión no configurado");
+
+                using (MySqlConnection conn = ServicioDeBaseDeDatos.ObtenerConexion())
                 {
-                    throw new Exception("Usted no cuenta con permisos para acceder");
-                }
-                else
-                {
-                    if (esAdmin)
+                    Usuario miUsuario = UsuarioController.BuscarUsuario(conn, txtUsuario.Text, txtContrasenia.Text);
+
+                    if (esAdmin != miUsuario.EsAdmin)
                     {
-                        Servidor frmServidor = new Servidor();
-                        frmServidor.ShowDialog();
+                        throw new Exception("Usted no cuenta con permisos para acceder");
                     }
                     else
                     {
-                        Cliente frmCliente = new Cliente();
-                        frmCliente.ShowDialog();
+                        if (esAdmin)
+                        {
+                            Servidor frmServidor = new Servidor();
+                            frmServidor.Show();
+                        }
+                        else
+                        {
+                            Cliente frmCliente = new Cliente();
+                            frmCliente.Show();
+                        }
                     }
                 }
+            }
+            catch (Exception ex) { 
+                MessageBox.Show(ex.Message);
             }
         }
     }
